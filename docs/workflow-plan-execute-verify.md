@@ -1,0 +1,64 @@
+# Workflow Plan → Execute → Verify
+
+C'est le cœur du harness. Il transforme un agent « qui se déclare fini » en un agent dont
+la fin de tâche est **vérifiée par une machine**, pas par lui-même.
+
+## Pourquoi
+
+Un agent IA livré à lui-même a tendance à : sur-estimer ce qu'il a fait, déclarer
+« terminé » sans avoir lancé les tests, et accumuler du contexte jusqu'à dériver. Les
+trois phases ci-dessous imposent un rythme et un **gate déterministe** à la fin.
+
+> Principe : *un modèle moyen avec un bon harness bat un excellent modèle avec un mauvais
+> harness.*
+
+## Les trois phases
+
+### 1. PLAN
+Avant tout code. L'agent produit : objectif, fichiers concernés, approche par étapes,
+risques, et **comment ce sera vérifié**. Pour un changement à fort impact, il attend une
+validation humaine.
+
+- Avec Claude : commande `/plan`.
+- Avec Copilot : demander explicitement « Donne-moi d'abord un plan, sans coder » ou
+  utiliser le snippet `!plan` dans Copilot Chat / l'éditeur.
+
+### 2. EXECUTE
+Implémentation par **petits incréments**. Un commit = un changement logique. On édite
+l'existant plutôt que de recréer. Aucune suppression de fichier sans accord.
+
+- Avec Claude : commande `/implement`.
+- Avec Copilot : utiliser le snippet `!implement` pour obtenir le prompt structuré, ou
+  demander « Implémente le plan validé, en suivant AGENTS.md ».
+
+### 3. VERIFY — le gate
+On lance `scripts/verify.sh` : **lint + test + build**. Tant qu'une étape échoue, la tâche
+n'est PAS terminée. L'agent corrige et relance, ou signale un blocage. Une fois tout vert,
+commit au format Conventional Commits.
+
+- Avec Claude : commande `/verify`.
+- Avec Copilot : il n'existe pas de slash command `/verify` natif. Utilise le snippet
+  `!verify` dans Copilot Chat pour injecter la commande exacte, ou exécute manuellement
+  `bash scripts/verify.sh` dans le terminal. L'agent Copilot doit rappeler cette commande
+  à chaque fin de tâche.
+
+## Règle d'or de la phase Verify
+
+L'agent ne doit **jamais** écrire « c'est terminé » sans avoir réellement exécuté les
+checks et rapporté leur sortie. La vérité vient de la sortie du script, pas de l'agent.
+
+## Utilisation par agent
+
+| Agent | Commande native | Substitut pour le workflow |
+|---|---|---|
+| Claude Code | `/plan`, `/implement`, `/verify` | directe |
+| GitHub Copilot | pas de slash commands custom | snippets `!plan`, `!implement`, `!verify`, `!dod` dans `.vscode/harness.code-snippets` |
+
+Les snippets permettent de coller les prompts du harness dans Copilot Chat ou l'éditeur,
+exactement comme les slash commands le font pour Claude.
+
+## Gestion du contexte (bonus)
+
+Pour les tâches longues : ne pas tout charger d'un coup. Injecter la doc/les specs
+seulement quand une étape en a besoin (*progressive disclosure*), et résumer
+périodiquement l'historique pour ne pas saturer la fenêtre de contexte.
