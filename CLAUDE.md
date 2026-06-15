@@ -8,7 +8,8 @@ applique toutes ses règles.** Ce fichier ne contient que ce qui est spécifique
 1. Lis `AGENTS.md` en entier.
 2. Pour toute tâche non triviale, applique le cycle **Plan → Execute → Verify**
    (voir `docs/workflow-plan-execute-verify.md`).
-3. Utilise les commandes dans `.claude/commands/` (`/plan`, `/implement`, `/verify`).
+3. Utilise les commandes dans `.claude/commands/` (`/plan`, `/implement`, `/verify`,
+   `/init-project`).
 
 ## Rappels prioritaires (repris d'AGENTS.md)
 
@@ -23,6 +24,9 @@ applique toutes ses règles.** Ce fichier ne contient que ce qui est spécifique
 - **Tests** : Vitest via `@angular/build:unit-test` côté frontend, Jest côté backend.
 - **API** : le backend expose `/api/profile`, `/api/projects`, `/api/skills` ; le frontend
   consomme via `core/services/api.service.ts` avec un proxy vers `localhost:3000` en dev.
+- **Initialisation** : lance `/init-project` au premier usage du harness ou après un
+  changement majeur de stack pour aligner les docs avec la codebase réelle, y compris les
+  librairies de composants dans `docs/rules-component-libraries.md`.
 - Quand tu modifies plusieurs fichiers, **annonce d'abord ton plan** (fichiers + approche)
   avant d'éditer, puis exécute.
 - Préfère **éditer** les fichiers existants plutôt que d'en recréer.

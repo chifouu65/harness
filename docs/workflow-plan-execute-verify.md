@@ -49,13 +49,31 @@ checks et rapporté leur sortie. La vérité vient de la sortie du script, pas d
 
 ## Utilisation par agent
 
-| Agent | Commande native | Substitut pour le workflow |
-|---|---|---|
-| Claude Code | `/plan`, `/implement`, `/verify` | directe |
-| GitHub Copilot | pas de slash commands custom | snippets `!plan`, `!implement`, `!verify`, `!dod` dans `.vscode/harness.code-snippets` |
+| Agent | Commande native | Substitut pour le workflow | Initialisation |
+|---|---|---|---|
+| Claude Code | `/plan`, `/implement`, `/verify` | directe | `/init-project` |
+| GitHub Copilot | pas de slash commands custom | snippets `!plan`, `!implement`, `!verify`, `!dod`, `!commit`, `!init` dans `.vscode/harness.code-snippets` | `!init` |
 
 Les snippets permettent de coller les prompts du harness dans Copilot Chat ou l'éditeur,
 exactement comme les slash commands le font pour Claude.
+
+## Initialisation du harness (`/init-project`)
+
+Avant de commencer à travailler sur un repo frais ou après un changement majeur de stack,
+utilise `/init-project` (Claude Code) ou le snippet `!init` (Copilot Chat). Cette commande :
+
+1. Détecte la stack réelle (frameworks, versions, package managers).
+2. Identifie les librairies de composants et les composants shared existants.
+3. Pour chaque librairie de composants, explore `node_modules/<lib>/` (package.json,
+   README, exports, barrel files) pour lister les modules d'import et les composants clés.
+4. Compare la codebase avec les docs du harness (`AGENTS.md`, `CLAUDE.md`,
+   `.github/copilot-instructions.md`, `scripts/verify.sh`, `.gitignore`,
+   `docs/rules-component-libraries.md`).
+5. Propose un rapport d'écart et, après validation, applique les corrections.
+6. Termine par un `bash scripts/verify.sh` pour garantir que le gate passe toujours.
+
+C'est la commande de bootstrap du harness : elle évite que la documentation et la
+structure du repo divergent.
 
 ## Gestion du contexte (bonus)
 

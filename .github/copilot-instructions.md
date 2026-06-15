@@ -15,6 +15,8 @@ les suggestions et Copilot Chat. Garde ce fichier court : les détails sont dans
   `async` pipe pour l'état, pas de logique lourde dans les templates.
   **Tout HTML/template Angular est soumis à `docs/rules-html-accessibility.md` et
   `docs/rules-frontend-design.md`.**
+  **Si `docs/rules-component-libraries.md` liste des librairies de composants, utiliser
+  celles-ci en priorité plutôt que de recréer des composants maison.**
 - **NestJS** : contrôleurs/services/modules ; validation des entrées via
   `class-validator`/`class-transformer` si ajoutée ; exception filter centralisé.
 - **Nommage** : `camelCase`, `PascalCase` (types/classes/composants), `UPPER_SNAKE_CASE`
@@ -77,11 +79,12 @@ Snippet : `!verify`.
 | `!verify` | Commande `bash scripts/verify.sh` + règles |
 | `!dod` | Checklist Definition of Done |
 | `!commit` | Template commit Conventional Commits |
+| `!init` | Phase INIT : aligne le harness avec la codebase réelle |
 
 ### Utilisation dans VS Code
 
 1. Ouvre Copilot Chat (`Ctrl+Alt+I`) ou un fichier Markdown vierge.
-2. Tape `!plan`, `!implement`, `!verify`, `!dod` ou `!commit`.
+2. Tape `!plan`, `!implement`, `!verify`, `!dod`, `!commit` ou `!init`.
 3. Appuie sur `Tab` ou `Entrée` pour injecter le prompt structuré.
 4. Remplis les placeholders avec le contexte de ta tâche.
 

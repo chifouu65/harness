@@ -51,13 +51,17 @@ Cette boucle est ce qui distingue un agent fiable d'une démo : la phase Verify 
 
 ## 3bis. Commandes et snippets disponibles
 
-| Agent | Mécanisme | Plan | Execute | Verify | Definition of Done | Commit |
-|---|---|---|---|---|---|---|
-| Claude Code | slash commands (`.claude/commands/*.md`) | `/plan` | `/implement` | `/verify` | non applicable | manuel ou guidé par `/verify` |
-| GitHub Copilot | VS Code snippets (`.vscode/harness.code-snippets`) | `!plan` | `!implement` | `!verify` | `!dod` | `!commit` |
+| Agent | Mécanisme | Plan | Execute | Verify | Definition of Done | Commit | Init |
+|---|---|---|---|---|---|---|---|
+| Claude Code | slash commands (`.claude/commands/*.md`) | `/plan` | `/implement` | `/verify` | non applicable | manuel ou guidé par `/verify` | `/init-project` |
+| GitHub Copilot | VS Code snippets (`.vscode/harness.code-snippets`) | `!plan` | `!implement` | `!verify` | `!dod` | `!commit` | `!init` |
 
 Les snippets permettent de coller les prompts du harness dans Copilot Chat ou l'éditeur,
 exactement comme les slash commands le font pour Claude.
+
+La commande `/init-project` (Claude) et le snippet `!init` (Copilot) initialisent ou
+réalignent le harness avec la stack réelle du repo : détection de la stack, librairies de
+composants, scripts, structure, et mise à jour des fichiers de documentation.
 
 ## 4. Conventions de code
 
@@ -69,6 +73,9 @@ Référence détaillée : `docs/conventions-angular-express.md` (à renommer
   soumis aux règles de :
   - `docs/rules-html-accessibility.md` (a11y)
   - `docs/rules-frontend-design.md` (design system, tokens, responsive)
+  - `docs/rules-component-libraries.md` (librairies de composants détectées par `/init-project`)
+- Si une librairie de composants est listée dans `docs/rules-component-libraries.md`,
+  utiliser ses composants en priorité plutôt que d'en créer un équivalent maison.
 - Composants standalone par défaut. Un composant = un dossier (`.ts`, `.html`, `.scss`,
   `.spec.ts`).
 - Logique métier dans des **services** injectables, pas dans les composants.

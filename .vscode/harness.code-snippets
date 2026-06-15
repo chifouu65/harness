@@ -71,5 +71,22 @@
       "Un commit = un changement logique. Si plusieurs changements logiques, fais plusieurs commits."
     ],
     "description": "Template commit Conventional Commits du harness"
+  },
+  "Harness: Init project": {
+    "prefix": "!init",
+    "body": [
+      "Phase INIT : aligne le harness avec la codebase réelle.",
+      "",
+      "1. Détecte la stack (frontend/backend/frameworks/package managers).",
+      "2. Identifie les librairies de composants via package.json ET node_modules/ (package.json, README, exports, barrel files).",
+      "3. Liste les composants disponibles et ceux déjà utilisés dans le projet.",
+      "4. Mets à jour docs/rules-component-libraries.md avec les modules d'import et règles d'usage.",
+      "5. Corrige AGENTS.md, CLAUDE.md, .github/copilot-instructions.md, scripts/verify.sh, .gitignore si nécessaire.",
+      "6. Lance bash scripts/verify.sh.",
+      "7. Commit : chore(docs): aligne le harness avec la stack détectée",
+      "",
+      "Ne modifie jamais la logique métier du projet pendant une phase INIT."
+    ],
+    "description": "Prompt phase INIT du harness pour Copilot"
   }
 }
