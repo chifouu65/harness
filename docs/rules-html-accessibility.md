@@ -1,63 +1,51 @@
 # Règles d'accessibilité HTML (a11y)
 
-Ces règles s'appliquent à **tout fichier `.html`, `.component.html`, template Angular, ou fragment de markup** créé ou modifié dans ce repo. Elles visent le niveau **AA du RGAA / WCAG 2.1** sans ajouter de complexité inutile.
+Ces règles s'appliquent à **tout fichier HTML, template, ou fragment de markup** créé ou
+modifié dans ce repo.
 
-## 1. Sémantique HTML
+> ⚙️ REMPLIR : ajouter des règles spécifiques au framework ([FRAMEWORK_FRONTEND]) si
+> besoin.
 
-- Utiliser les balises sémantiques appropriées : `header`, `main`, `section`, `article`, `nav`, `aside`, `footer`, `h1`–`h6`, `button`, `a`, `label`, `ul`/`ol`/`li`.
-- Ne pas utiliser `div` ou `span` là où une balise sémantique existe.
-- La hiérarchie des titres (`h1` → `h2` → `h3`) doit être cohérente et sans saut (pas de `h1` suivi d'un `h3`).
+## Sémantique
 
-## 2. Navigation au clavier
+- Utiliser les balises sémantiques (`header`, `nav`, `main`, `section`, `article`, `footer`,
+  `h1`–`h6`) pour structurer le document.
+- Une seule balise `h1` par page.
+- Ne pas sauter de niveaux de titres (`h1` → `h2` → `h3`).
 
-- Tout élément interactif doit être focusable et utilisable au clavier.
-- Ne pas supprimer le `outline` au focus sans fournir un style de focus visible alternatif.
-- Gérer explicitement les touches `Escape`, `Enter`, `Space`, `Tab`, `ArrowUp/Down` quand un composant le nécessite (menus, modales, listes).
+## Navigation clavier
 
-## 3. Images et médias
+- Tout élément interactif doit être focusable et actionnable au clavier.
+- Ordre de tabulation logique et visible.
+- Gérer `Enter` / `Space` / `Escape` quand nécessaire.
 
-- Toute image informative doit avoir un `alt` descriptif.
-- Les images décoratives doivent avoir `alt=""` (pas d'`alt` absent, pas de texte décoratif).
-- Éviter les images de texte ; si impossible, reproduire le texte dans un attribut `alt` ou à proximité.
+## Images
 
-## 4. Formulaires
+- Toute image porteuse d'information a un `alt` descriptif.
+- Les images décoratives utilisent `alt=""`.
 
-- Chaque champ `input`, `select`, `textarea` doit être associé à un `label` via `for` + `id`, ou `aria-labelledby`, ou `aria-label` si le design l'impose.
-- Les messages d'erreur doivent être liés au champ via `aria-describedby` ou `aria-errormessage`.
-- Ne pas utiliser `placeholder` comme seule étiquette.
+## Formulaires
 
-## 5. Contraste et lisibilité
+- Chaque champ a un `label` associé (`for` / `id` ou aria-labelledby).
+- Les messages d'erreur sont reliés au champ via `aria-describedby`.
+- Les regroupements utilisent `fieldset` + `legend`.
 
-- Le contraste texte/fond doit respecter un ratio minimum de **4.5:1** pour le corps de texte et **3:1** pour les gros textes (24px+ ou 18px+ gras).
-- Les éléments interactifs (boutons, liens, icônes cliquables) doivent avoir un contraste minimum de **3:1** avec leur fond.
-- Ne pas transmettre une information uniquement par la couleur (ajouter un texte, une icône, un motif ou un label).
+## Contraste et lisibilité
 
-## 6. ARIA — utilisation raisonnée
+- Respecter les ratios de contraste WCAG 2.1 AA minimum.
+- Ne pas se fier à la couleur seule pour transmettre une information.
 
-- **Première règle d'ARIA : ne pas utiliser ARIA** si une balise HTML sémantique suffit.
-- Les rôles ARIA (`role="dialog"`, `role="tabpanel"`, etc.) doivent être justifiés.
-- Les attributs `aria-*` doivent être cohérents et mis à jour (pas de `aria-expanded="false"` sur un élément ouvert).
-- Les composants custom doivent implémenter les patterns ARIA correspondants (ex. `combobox`, `dialog`, `tabs`).
+## ARIA
 
-## 7. Structure de page
+- Utiliser ARIA avec parcimonie ; préférer la sémantique HTML native.
+- Ne pas ajouter `role` redondants (`role="button"` sur un `button`).
+- Maintenir `aria-*` cohérents avec l'état visuel.
 
-- Une seule balise `<main>` par page.
-- Les régions de page (`header`, `main`, `footer`, `nav`, `aside`) doivent être présentes et identifiables.
-- Ajouter `lang="fr"` (ou la langue réelle du contenu) sur `<html>`.
+## Animations
 
-## 8. Mouvement et animations
+- Respecter `prefers-reduced-motion` pour les animations non essentielles.
 
-- Respecter `prefers-reduced-motion` : désactiver ou réduire les animations pour les utilisateurs qui le demandent.
-- Ne pas lancer d'animation, vidéo ou son automatiquement sans moyen de pause/contrôle.
+## Tests
 
-## 9. Liens et boutons
-
-- Un `<button>` déclenche une action dans la page ; un `<a>` mène vers une autre page ou ancre.
-- Ne pas utiliser `<a>` sans `href` (sauf avec `role="button"` + gestion clavier justifiée).
-- Le texte du lien doit être explicite hors contexte (éviter « cliquez ici », « en savoir plus » seul).
-
-## 10. Tests et vérification
-
-- Lancer le lint Angular accessibility : `@angular-eslint/template/accessibility-*` doit passer.
-- Vérifier la navigation au clavier manuellement sur le composant modifié.
-- S'il y a une animation/dépendance visuelle forte, tester avec `prefers-reduced-motion: reduce` activé.
+- Si un plugin d'accessibilité existe dans le projet (ex. [PLUGIN_A11Y]), l'activer.
+- Vérifier manuellement la navigation clavier sur les nouveaux composants interactifs.

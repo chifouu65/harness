@@ -1,12 +1,22 @@
 # Harness — config partagée Copilot + Claude
 
 Un *harness* léger et réutilisable : un ensemble de fichiers d'instructions qui donnent à
-**GitHub Copilot** et **Claude** (Code / Cowork) le même cadre de travail sur tes projets
-**Angular + NestJS (TypeScript)**.
+**GitHub Copilot** et **Claude** le même cadre de travail sur tes projets
+**[STACK_TECHNIQUE]**.
 
 L'idée du harness engineering : la qualité d'un agent vient surtout de ce qui l'entoure
 (règles, workflow, vérification déterministe), pas seulement du modèle. Ce dossier en est
 la version « config » : à déposer dans n'importe quel repo.
+
+## ⚠️ Branche template
+
+Cette branche `template` contient le **squelette générique** du harness. Les valeurs
+spécifiques (nom du projet, stack, ports, frameworks) sont remplacées par des placeholders
+`[...]`. Lance `/init-project` (Claude) ou `!init` (Copilot) sur un repo cible pour
+remplir automatiquement ces placeholders et générer la documentation adaptée.
+
+Pour la version déjà remplie et fonctionnelle sur le projet de référence (Angular + NestJS),
+voir la branche `main`.
 
 ## Ce que fait ce harness
 
@@ -27,8 +37,8 @@ la version « config » : à déposer dans n'importe quel repo.
 | `.claude/commands/` | Commandes `/plan`, `/implement`, `/verify`, `/init-project` pour Claude. |
 | `.vscode/harness.code-snippets` | Snippets `!plan`, `!implement`, `!verify`, `!dod`, `!commit`, `!init` pour VS Code / Copilot Chat. |
 | `docs/workflow-plan-execute-verify.md` | Le workflow central, détaillé. |
-| `docs/conventions-angular-express.md` | Conventions de code détaillées. |
-| `docs/rules-html-accessibility.md` | Règles a11y strictes pour tout HTML/template Angular. |
+| `docs/conventions-[STACK].md` | Conventions de code détaillées. |
+| `docs/rules-html-accessibility.md` | Règles a11y strictes pour tout HTML/template. |
 | `docs/rules-frontend-design.md` | Règles design system, tokens, responsive pour le frontend. |
 | `docs/rules-component-libraries.md` | Librairies de composants détectées par `/init-project` / `!init` (règles d'usage). |
 | `scripts/verify.sh` | Gate déterministe : lint + test + build. |
@@ -87,12 +97,16 @@ Toute tâche non triviale suit **Plan → Execute → Verify**, et ne se termine
 `scripts/verify.sh` sort en code 0. C'est ce gate déterministe qui rend les agents
 fiables plutôt qu'« impressionnants en démo ».
 
-## Évolutions récentes
+## ⚙️ À remplir avant la première utilisation
 
-- Snippets Copilot complets : `!plan`, `!implement`, `!verify`, `!dod`, `!commit`, `!init`.
-- Commande `/init-project` et snippet `!init` pour initialiser le harness depuis la codebase.
-- Règles scopées `docs/rules-html-accessibility.md` et `docs/rules-frontend-design.md`,
-  intégrées dans `/implement` et `!implement`.
-- Fichier `docs/rules-component-libraries.md` pour documenter les librairies UI détectées
-  et forcer leur réutilisation.
-- Vérification que `bash scripts/verify.sh` passe en code 0 après les modifications.
+Avant de lancer `/init-project`, tu peux déjà renseigner à la main :
+
+- `[NOM_DU_PROJET]`, `[FRAMEWORK_FRONTEND]`, `[FRAMEWORK_BACKEND]` dans `AGENTS.md`.
+- Les ports et l'URL de l'API dans `AGENTS.md`.
+- Les commandes de test dans `scripts/verify.sh`.
+- Les règles spécifiques dans `docs/conventions-[STACK].md`.
+
+Ensuite, `/init-project` complètera automatiquement les informations manquantes et
+génèrera `docs/rules-component-libraries.md`.
+
+> ⚙️ REMPLIR : adapter tous les `[...]` de ce README au projet cible.

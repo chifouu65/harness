@@ -57,7 +57,7 @@ checks et rapporté leur sortie. La vérité vient de la sortie du script, pas d
 Les snippets permettent de coller les prompts du harness dans Copilot Chat ou l'éditeur,
 exactement comme les slash commands le font pour Claude.
 
-## Initialisation du harness (`/init-project`)
+## Initialisation du harness (`/init-project` / `!init`)
 
 Avant de commencer à travailler sur un repo frais ou après un changement majeur de stack,
 utilise `/init-project` (Claude Code) ou le snippet `!init` (Copilot Chat). Cette commande :

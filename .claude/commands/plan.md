@@ -6,41 +6,54 @@ scope: project
 
 # Phase PLAN
 
-Tu es en **phase PLAN** du workflow Plan → Execute → Verify.
-
-**Règle absolue : n'écris, ne modifie et ne supprime aucun fichier de production pour le moment.**
-Tu peux seulement lire le repo pour comprendre le contexte.
-
-## Objectif
-
-Produire un plan suffisamment précis pour que l'utilisateur valide ou corrige l'approche avant que le code soit touché.
+Tu es en **phase PLAN** du harness. Tu ne dois **ni créer, ni modifier, ni supprimer**
+un seul fichier de production. Tu produis un plan structuré que l'utilisateur valide avant
+passage à `/implement`.
 
 ## Entrée
 
-La tâche demandée est dans `$ARGUMENTS`.
-Si `$ARGUMENTS` est vide ou ambigu, pose des questions avant de continuer.
+Utilise les arguments de la commande (`$ARGUMENTS`) comme sujet. Si `$ARGUMENTS` est vide
+ou ambigu, demande un éclaircissement avant de continuer.
 
-## Sortie attendue
+## Sortie obligatoire
 
-Réponds en 6 sections obligatoires (numérotées) :
+Réponds dans ce format strict :
 
-1. **Résumé de la tâche** — une phrase qui reformule l'objectif final.
-2. **Hypothèses** — ce que tu considères comme vrai sans l'avoir vérifié (stack, API existante, comportement attendu).
-3. **Fichiers concernés** — liste exhaustive avec, pour chacun, l'action : `LIRE`, `MODIFIER`, `CRÉER`, `NE PAS TOUCHER`.
-4. **Plan d'action** — étapes numérotées, ordonnées, chacune < 3 lignes.
-5. **Risques et mitigations** — effets de bord, régressions, points de vigilance.
-6. **Vérification** — quels tests, lint, build, commandes exactes seront utilisés pour valider.
-   Si le plan touche au frontend Angular ou à des fichiers HTML/SCSS, mentionne explicitement
-   `docs/rules-html-accessibility.md` et `docs/rules-frontend-design.md`.
+```markdown
+## Résumé
+[objectif en 1 phrase]
 
-## Contraintes
+## Hypothèses
+- [ce que tu prends pour acquis]
 
-- Si la tâche touche ≥ 5 fichiers ou change un contrat API, **attends explicitement la validation de l'utilisateur** avant de passer à `/implement`.
-- Ne propose jamais de supprimer un fichier sans justifier le besoin et demander l'accord.
-- N'invente pas d'API, de librairie ou de endpoint : si tu n'es pas sûr, marque-le comme hypothèse à vérifier.
-- Termine ta réponse par :
-  > Valide ce plan (`/implement <numéro de la tâche>`) ou corrige-le avant de continuer.
+## Fichiers concernés
+| Fichier | Action | Justification |
+|---|---|---|
+| `[CHEMIN]` | `[LIRE / MODIFIER / CRÉER / NE PAS TOUCHER]` | [pourquoi] |
 
-## Rappel
+## Plan d'action
+1. [étape concise, < 3 lignes]
+2. ...
 
-La source de vérité est `AGENTS.md`. En cas de conflit entre cette commande et `AGENTS.md`, `AGENTS.md` prime.
+## Risques et mitigations
+- **Risque** : [description] → **Mitigation** : [action]
+
+## Vérification
+- Commande exacte : `bash scripts/verify.sh`
+- ⚙️ Si HTML/SCSS/template [FRAMEWORK_FRONTEND], inclure `docs/rules-html-accessibility.md`
+  et `docs/rules-frontend-design.md`.
+- ⚙️ Si librairie de composants listée dans `docs/rules-component-libraries.md`,
+  privilégier ses composants.
+```
+
+## Règles
+
+- Ne propose pas de supprimer un fichier sans justifier chaque suppression et demander
+  confirmation.
+- Ne invente pas d'API ou de comportement : cite les fichiers/types existants.
+- Si ≥ 5 fichiers sont touchés ou si l'impact change un contrat API, attends une validation
+  humaine explicite avant `/implement`.
+
+## Rappel final
+
+Termine par : **Valide ce plan avant de passer à `/implement`.**

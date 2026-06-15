@@ -4,6 +4,8 @@
 # Usage : bash scripts/verify.sh [projet]
 #   - Sans argument : vérifie tous les sous-projets détectés.
 #   - Avec argument (backend|frontend) : vérifie uniquement ce projet.
+#
+# ⚙️ REMPLIR : adapter PROJECTS et les commandes de test à la stack détectée.
 
 set -uo pipefail
 
@@ -53,8 +55,8 @@ run() {
   fi
 }
 
-# Liste les sous-projets à vérifier.
-PROJECTS=(backend frontend)
+# ⚙️ REMPLIR : liste les sous-projets à vérifier.
+PROJECTS=([NOM_DU_PROJET_1] [NOM_DU_PROJET_2])
 if [ $# -ge 1 ]; then
   PROJECTS=("$1")
 fi
@@ -90,7 +92,9 @@ for dir in "${PROJECTS[@]}"; do
   if $PM run | grep -qE '^\s*test:ci'; then
     run "test:ci ($dir)" "$PM" run test:ci --silent
   elif $PM run | grep -qE '^\s*test'; then
-    # Angular : ng test sans --watch=false reste bloqué ; on le force.
+    # ⚙️ REMPLIR : adapter la commande de test au framework.
+    # Exemple Angular : ng test --watch=false
+    # Exemple Jest/Vitest : $PM test --silent
     if grep -q '"test": "ng test"' package.json 2>/dev/null; then
       run "test ($dir)" "$PM" test --watch=false
     else

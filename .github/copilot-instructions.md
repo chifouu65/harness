@@ -3,72 +3,38 @@
 **La source de vérité de ce repo est [`../AGENTS.md`](../AGENTS.md). Applique toutes ses
 règles.** Ce fichier ne contient que ce qui est utile à Copilot.
 
-GitHub Copilot lit automatiquement `.github/copilot-instructions.md` comme contexte pour
-les suggestions et Copilot Chat. Garde ce fichier court : les détails sont dans
-`AGENTS.md`.
+GitHub Copilot ne supporte pas de slash commands custom. Ce repo fournit donc des
+snippets VS Code dans `.vscode/harness.code-snippets` (`!plan`, `!implement`, `!verify`,
+`!dod`, `!commit`, `!init`) pour reproduire le workflow dans Copilot Chat.
 
-## Règles à toujours respecter
+## Rappels prioritaires (repris d'AGENTS.md)
 
-- **Stack** : Angular 21 + NestJS 11 en **TypeScript strict**. Pas de `any` implicite.
-- **Ne propose jamais de supprimer un fichier.**
-- **Angular** : composants standalone, logique dans des services injectables, Signals /
-  `async` pipe pour l'état, pas de logique lourde dans les templates.
-  **Tout HTML/template Angular est soumis à `docs/rules-html-accessibility.md` et
-  `docs/rules-frontend-design.md`.**
-  **Si `docs/rules-component-libraries.md` liste des librairies de composants, utiliser
-  celles-ci en priorité plutôt que de recréer des composants maison.**
-- **NestJS** : contrôleurs/services/modules ; validation des entrées via
-  `class-validator`/`class-transformer` si ajoutée ; exception filter centralisé.
-- **Nommage** : `camelCase`, `PascalCase` (types/classes/composants), `UPPER_SNAKE_CASE`
-  (constantes).
-- **Gestion d'erreur explicite** : jamais de `catch` vide.
-- **Pas de `console.log` ni `debugger`** dans le code livré.
+- **Ne supprime jamais de fichier** sans accord explicite.
+- **Lint + test obligatoires** après chaque changement : `bash scripts/verify.sh`.
+- **Commits** au format Conventional Commits.
+- **Code clean**, typage strict, pas d'API inventée.
 
 ## Workflow Plan → Execute → Verify
 
-Toute tâche non triviale suit ce cycle. Aide l'utilisateur à le respecter.
-
-### 1. PLAN (pas de code)
-
-Quand on te demande une feature ou un fix, réponds d'abord par un plan structuré :
-
-- **Objectif** — reformule la demande en une phrase.
-- **Fichiers concernés** — liste les chemins exacts.
-- **Approche** — étapes ordonnées.
-- **Risques / points d'attention** — effets de bord, fichiers à ne pas toucher.
-- **Vérification** — comment valider (tests, lint, build).
-
-Tu peux injecter ce prompt rapidement avec le snippet `!plan`.
-
-### 2. EXECUTE (implémenter)
-
-Une fois le plan validé par l'utilisateur, implémente par petits incréments :
-
-- Édite les fichiers existants, ne les recrée pas.
-- Un commit logique à la fois.
-- TypeScript strict, code clean, conventions du projet.
-
-Snippet : `!implement`.
+1. **PLAN** — snippet `!plan` : demander un plan structuré, sans coder.
+2. **EXECUTE** — snippet `!implement` : implémenter par petits incréments cohérents.
+3. **VERIFY** — snippet `!verify` : lancer `bash scripts/verify.sh` (lint + test + build).
+   - Ne jamais dire « terminé » sans avoir mentionné `bash scripts/verify.sh` et son
+     résultat réel.
 
 ### Spécifique frontend
 
-Si la tâche touche à un fichier HTML, SCSS ou template Angular, `!implement` doit rappeler
-l'application de `docs/rules-html-accessibility.md` et `docs/rules-frontend-design.md`.
+Si la tâche touche à un fichier HTML, [CSS] ou template [FRAMEWORK_FRONTEND], `!implement`
+doit rappeler l'application de `docs/rules-html-accessibility.md` et
+`docs/rules-frontend-design.md`.
 
-### 3. VERIFY (gate déterministe)
+Si `docs/rules-component-libraries.md` liste des librairies de composants, utiliser
+celles-ci en priorité plutôt que de recréer des composants maison.
 
-**Avant de déclarer quoi que ce soit terminé**, rappelle à l'utilisateur de lancer :
+### Spécifique backend
 
-```bash
-bash scripts/verify.sh
-```
-
-Ce script exécute : `lint` → `test` → `build` pour chaque sous-projet détecté
-(backend, frontend). Tant qu'une étape échoue, la tâche **n'est pas terminée**.
-
-Après un succès, crée le(s) commit(s) au format Conventional Commits.
-
-Snippet : `!verify`.
+[FRAMEWORK_BACKEND]. Architecture en couches : [RÈGLES_ARCHITECTURE]. Validation des
+entrées, erreurs centralisées, pas de logique métier dans les contrôleurs.
 
 ## Snippets disponibles
 
@@ -88,27 +54,15 @@ Snippet : `!verify`.
 3. Appuie sur `Tab` ou `Entrée` pour injecter le prompt structuré.
 4. Remplis les placeholders avec le contexte de ta tâche.
 
-> Les snippets sont dans `.vscode/harness.code-snippets`. Ils ne remplacent pas
-> `AGENTS.md` : ils en sont une interface rapide pour Copilot, qui n'a pas de slash
-> commands custom.
-
 ## Commits
 
-Conventional Commits : `<type>(scope): description`. Types : `feat`, `fix`, `refactor`,
-`test`, `docs`, `chore`, `perf`, `ci`, `build`.
-
-## Tests & lint
-
-Avant de proposer un changement comme terminé, rappeler de lancer le lint et les tests
-(`npm run lint`, `npm test` / `ng test --watch=false` / `pnpm run lint`) — voir
-`scripts/verify.sh`.
-
-## Definition of Done
-
-Compile + lint OK + tests OK + commit conventionnel + pas de code mort. (Détail dans
-`AGENTS.md` §7.)
+Format : `<type>[scope]: <description à l'impératif>`.
+Types : `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`, `ci`, `build`.
 
 ## Règle d'or
 
 Ne dis jamais "c'est terminé" ou "fait" sans avoir mentionné explicitement le gate
-`bash scripts/verify.sh`. Même si le code semble trivial, le gate est obligatoire.
+`bash scripts/verify.sh`. Même si le code semble trivial, l'utilisateur doit pouvoir le
+relancer.
+
+> ⚙️ REMPLIR : remplacer tous les `[...]` par les informations réelles du projet.

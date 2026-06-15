@@ -10,9 +10,9 @@
       "   - ${4:chemin} → ${5|LIRE,MODIFIER,CRÉER,NE PAS TOUCHER|}",
       "4. Plan d'action : ${6:étapes ordonnées, < 3 lignes chacune}.",
       "5. Risques : ${7:effets de bord / régressions}.",
-      "6. Vérification : ${8:tests + lint + build exacts}. Si HTML/SCSS/Angular, inclure docs/rules-html-accessibility.md et docs/rules-frontend-design.md.",
+      "6. Vérification : ${8:tests + lint + build exacts}. Si HTML/[CSS]/[FRAMEWORK_FRONTEND], inclure docs/rules-html-accessibility.md et docs/rules-frontend-design.md.",
       "",
-      "Respecte AGENTS.md : TS strict, pas de suppression, pas d'API inventée. Valide ce plan avant `/implement`."
+      "Respecte AGENTS.md : typage strict, pas de suppression, pas d'API inventée. Valide ce plan avant `/implement`."
     ],
     "description": "Prompt structuré phase PLAN du harness"
   },
@@ -21,9 +21,9 @@
     "body": [
       "Phase EXECUTE pour le plan validé : ${1:feature/correction}.",
       "",
-      "Règles : petits commits logiques, éditer plutôt que recréer, ne rien supprimer sans accord, TypeScript strict, pas de console.log/debugger/code mort, conventions AGENTS.md §4.",
+      "Règles : petits commits logiques, éditer plutôt que recréer, ne rien supprimer sans accord, typage strict, pas de console.log/debugger/code mort, conventions AGENTS.md §4.",
       "",
-      "Si HTML/SCSS/template Angular : appliquer aussi docs/rules-html-accessibility.md et docs/rules-frontend-design.md.",
+      "Si HTML/[CSS]/template [FRAMEWORK_FRONTEND] : appliquer aussi docs/rules-html-accessibility.md et docs/rules-frontend-design.md. Si docs/rules-component-libraries.md liste des libs UI, les utiliser en priorité.",
       "",
       "Si le plan est incomplet, signale-le et ajuste avant de continuer. Sinon, une fois le code posé, enchaîne sur `/verify` — ne déclare rien terminé."
     ],
@@ -48,7 +48,7 @@
     "prefix": "!dod",
     "body": [
       "Definition of Done (AGENTS.md §7) :",
-      "- [ ] Compile (`tsc` / `ng build` / `nest build`)",
+      "- [ ] Compile ([COMMANDE_BUILD])",
       "- [ ] Lint sans erreur",
       "- [ ] Tests passent ; nouveau comportement testé",
       "- [ ] Pas de fichier supprimé sans accord",

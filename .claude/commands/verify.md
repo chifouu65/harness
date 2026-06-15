@@ -6,55 +6,53 @@ scope: project
 
 # Phase VERIFY
 
-Tu es en **phase VERIFY** du workflow Plan → Execute → Verify.
-
-**C'est le gate final.** La tâche n'est terminée que si les vérifications passent réellement, pas parce que le code "semble bon".
+Tu es en **phase VERIFY** du harness. Cette phase est un **gate déterministe** : tant que
+`scripts/verify.sh` ne sort pas en code 0, la tâche n'est **pas** terminée.
 
 ## Procédure obligatoire
 
-1. **Lance le gate principal**
+1. **Avant de lancer**, lis `AGENTS.md` §7 (Definition of Done).
+2. Exécute exactement :
    ```bash
    bash scripts/verify.sh
    ```
-   S'il n'existe pas, exécute les équivalents projet par projet :
-   - `npm run lint` / `pnpm run lint`
-   - `npm test --silent` / `pnpm test --watch=false` / `ng test --watch=false`
-   - `npm run build` / `pnpm run build` / `ng build` / `nest build`
+   Si le fichier n'existe pas, lance les commandes équivalentes :
+   - lint : `[COMMANDE_LINT_FRONTEND]` et `[COMMANDE_LINT_BACKEND]`
+   - test : `[COMMANDE_TEST_FRONTEND]` et `[COMMANDE_TEST_BACKEND]`
+   - build : `[COMMANDE_BUILD_FRONTEND]` et `[COMMANDE_BUILD_BACKEND]`
+3. Rapporte le résultat **réel** de chaque étape :
+   - ✅ `lint OK`
+   - ✅ `test OK`
+   - ✅ `build OK`
+   - ❌ sinon, indique précisément quelle étape échoue et le message d'erreur.
+4. Si une étape échoue :
+   - corrige ;
+   - relance `bash scripts/verify.sh` ;
+   - répète jusqu'à succès ou jusqu'à 3 tentatives.
+5. Une fois le script en code 0, coche mentalement la Definition of Done de `AGENTS.md` §7.
+6. Crée le(s) commit(s) au format Conventional Commits :
+   ```bash
+   git add -p
+   git commit -m "[type]([scope]): [description impérative]"
+   ```
 
-2. **Rapporte le résultat réel**
-   - Pour chaque étape, indique : ✅ OK ou ❌ ÉCHEC.
-   - En cas d'échec, copie le **message d'erreur pertinent** (2–10 lignes max).
+## Règles de commit
 
-3. **Si une étape échoue**
-   - Analyse la cause.
-   - Corrige.
-   - **Relance** `bash scripts/verify.sh`.
-   - Répète jusqu'à ce que tout passe.
-   - Ne **jamais** désactiver un check, ignorer un test ou contourner le gate.
-
-4. **Definition of Done**
-   Vérifie explicitement chaque item d'`AGENTS.md` §7 avant de continuer :
-   - [ ] Compile (`tsc` / `ng build` / `nest build`)
-   - [ ] Lint sans erreur
-   - [ ] Tests passent ; nouveau comportement couvert par un test
-   - [ ] Pas de fichier supprimé sans accord
-   - [ ] Commit(s) au format Conventional Commits
-   - [ ] Pas de `console.log`, `debugger`, code mort
-   - [ ] `bash scripts/verify.sh` sort en code 0
-
-5. **Commit**
-   - Crée le(s) commit(s) au format Conventional Commits.
-   - Exemples : `feat(profile): ajoute le endpoint list`, `fix(frontend): corrige le mock canvas`.
-
-## En cas de blocage
-
-Si après **3 tentatives** une vérification échoue toujours :
-- **Arrête**.
-- Explique le blocage précisément.
-- Propose 2–3 options à l'utilisateur.
-- Ne déclare **pas** la tâche terminée.
+- Un commit = un changement logique.
+- Types : `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`, `ci`,
+  `build`.
+- Description en minuscule, sans point final, ≤ 72 caractères.
+- Scope : nom du domaine ou du sous-projet (ex. `[SCOPE]`).
 
 ## Règle d'or
 
-> Tu n'as pas le droit d'écrire "terminé", "fait", "OK" ou "c'est bon" tant que
-> `bash scripts/verify.sh` ne retourne pas un succès documenté.
+**Tu n'as pas le droit d'écrire « terminé » ou « fait » tant que `scripts/verify.sh` n'est
+pas passé avec succès.** Même si le code semble trivial, le gate est la seule source de
+vérité.
+
+## En cas de blocage
+
+Après 3 échecs de correction, arrête et expose clairement :
+- le dernier message d'erreur ;
+- ce que tu as déjà tenté ;
+- ce que tu recommandes (changement de scope, aide humaine, etc.).
